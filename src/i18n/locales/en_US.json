@@ -103,6 +103,7 @@
                 "source_target": "Source+Target",
                 "disable": "Disable",
                 "history_disable": "Disable History",
+                "history_cache_enable": "Use History as Cache",
                 "incremental_translate": "Incremental Translation",
                 "dynamic_translate": "Dynamic Translation",
                 "delete_newline": "Delete Newline",
@@ -458,7 +459,10 @@
             "copy": "Copy",
             "retry": "Try again",
             "delete_newline": "Delete Newline",
-            "translate_back": "Translation back to the original"
+            "translate_back": "Translation back to the original",
+            "from_cache_click_to_delete": "From history cache (click to delete)",
+            "cache_deleted": "Cache entry deleted",
+            "cache_delete_failed": "Failed to delete cache entry"
         },
         "recognize": {
             "recognize": "Recognize",

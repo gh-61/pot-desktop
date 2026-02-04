@@ -106,12 +106,17 @@
                 "pre_state": "موقعیت را به خاطر بسپار",
                 "close_on_blur": "روی Blur ببندید",
                 "incremental_translate": "ترجمه افزایشی",
-                "target_language": "زبان مقصد"
+                "target_language": "زبان مقصد",
+                "history_disable": "غیرفعال کردن تاریخچه",
+                "history_cache_enable": "استفاده از تاریخچه به عنوان حافظه پنهان"
             }
         },
         "translate": {
             "delete_newline": "پاک کردن خط جدید",
-            "retry": "تلاش مجدد"
+            "retry": "تلاش مجدد",
+            "from_cache_click_to_delete": "از حافظه پنهان تاریخچه (برای حذف کلیک کنید)",
+            "cache_deleted": "ورودی حافظه پنهان حذف شد",
+            "cache_delete_failed": "حذف ورودی حافظه پنهان ناموفق بود"
         },
         "recognize": {
             "delete_newline": "پاک کردن خط جدید",

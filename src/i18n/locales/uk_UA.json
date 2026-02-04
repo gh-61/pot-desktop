@@ -64,6 +64,7 @@
                     "24": "Дуже дуже великий (24 пікс.)"
                 },
                 "history_disable": "Вимкнути історію",
+                "history_cache_enable": "Використовувати історію як кеш",
                 "window_position": "Позиція вікна",
                 "remember_window_size": "Запам'ятати розмір вікна",
                 "mouse": "Слідувати за курсором",
@@ -105,7 +106,10 @@
             "translate": "Переклад",
             "retry": "Спробуй знову",
             "copy": "Скопіюй",
-            "delete_newline": "Видалити новий рядок"
+            "delete_newline": "Видалити новий рядок",
+            "from_cache_click_to_delete": "З кешу історії (натисніть, щоб видалити)",
+            "cache_deleted": "Запис кешу видалено",
+            "cache_delete_failed": "Не вдалося видалити запис кешу"
         },
         "recognize": {
             "translate": "Перекласти",

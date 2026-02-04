@@ -5,7 +5,9 @@
                 "title": "翻訳設定",
                 "label": "翻訳",
                 "delete_newline": "改行を削除",
-                "source_language": "ソース言語"
+                "source_language": "ソース言語",
+                "history_disable": "履歴を無効にする",
+                "history_cache_enable": "履歴をキャッシュとして使用"
             },
             "backup": {
                 "title": "バックアップ設定",
@@ -104,7 +106,10 @@
         "translate": {
             "translate": "翻訳",
             "delete_newline": "改行を削除",
-            "copy": "コピー"
+            "copy": "コピー",
+            "from_cache_click_to_delete": "履歴キャッシュから（クリックして削除）",
+            "cache_deleted": "キャッシュエントリを削除しました",
+            "cache_delete_failed": "キャッシュエントリの削除に失敗しました"
         },
         "recognize": {
             "translate": "翻訳",

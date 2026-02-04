@@ -103,6 +103,7 @@
                 "source_target": "Исходный+Перевод",
                 "disable": "Отключить",
                 "history_disable": "Отключить историю",
+                "history_cache_enable": "Использовать историю как кэш",
                 "incremental_translate": "Инкрементный перевод",
                 "dynamic_translate": "Динамический перевод",
                 "delete_newline": "Удаление новой строки",
@@ -458,7 +459,10 @@
             "copy": "Копировать",
             "retry": "Пробовать снова",
             "delete_newline": "Удалить новую строку",
-            "translate_back": "Перевод обратно к оригиналу"
+            "translate_back": "Перевод обратно к оригиналу",
+            "from_cache_click_to_delete": "Из кэша истории (нажмите для удаления)",
+            "cache_deleted": "Запись кэша удалена",
+            "cache_delete_failed": "Не удалось удалить запись кэша"
         },
         "recognize": {
             "recognize": "Распознать",

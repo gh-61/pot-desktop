@@ -115,6 +115,7 @@
                 "second_language": "Segundo idioma de destino",
                 "auto_copy": "Copiar automático",
                 "history_disable": "Desactivar historial",
+                "history_cache_enable": "Usar historial como caché",
                 "pre_state": "Recordar posición",
                 "remember_window_size": "Recordar tamaño de ventana",
                 "niutrans": "NiuTrans",
@@ -325,7 +326,10 @@
         "translate": {
             "speak": "Hablar",
             "copy": "Copiar",
-            "retry": "Intentar de nuevo"
+            "retry": "Intentar de nuevo",
+            "from_cache_click_to_delete": "Desde el caché del historial (clic para eliminar)",
+            "cache_deleted": "Entrada de caché eliminada",
+            "cache_delete_failed": "Error al eliminar la entrada de caché"
         }
     }
 }

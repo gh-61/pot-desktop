@@ -21,6 +21,7 @@ export default function Translate() {
     const [autoCopy, setAutoCopy] = useConfig('translate_auto_copy', 'disable');
     const [incrementalTranslate, setIncrementalTranslate] = useConfig('incremental_translate', false);
     const [historyDisable, setHistoryDisable] = useConfig('history_disable', false);
+    const [historyCacheEnable, setHistoryCacheEnable] = useConfig('history_cache_enable', false);
     const [dynamicTranslate, setDynamicTranslate] = useConfig('dynamic_translate', false);
     const [deleteNewline, setDeleteNewline] = useConfig('translate_delete_newline', false);
     const [rememberLanguage, setRememberLanguage] = useConfig('translate_remember_language', false);
@@ -163,6 +164,17 @@ export default function Translate() {
                                 isSelected={historyDisable}
                                 onValueChange={(v) => {
                                     setHistoryDisable(v);
+                                }}
+                            />
+                        )}
+                    </div>
+                    <div className='config-item'>
+                        <h3>{t('config.translate.history_cache_enable')}</h3>
+                        {historyCacheEnable !== null && (
+                            <Switch
+                                isSelected={historyCacheEnable}
+                                onValueChange={(v) => {
+                                    setHistoryCacheEnable(v);
                                 }}
                             />
                         )}

@@ -103,6 +103,7 @@
                 "source_target": "原文+译文",
                 "disable": "禁用",
                 "history_disable": "禁用历史记录",
+                "history_cache_enable": "使用历史记录作为缓存",
                 "incremental_translate": "增量翻译",
                 "dynamic_translate": "动态翻译",
                 "delete_newline": "自动删除换行",
@@ -458,7 +459,10 @@
             "copy": "复制",
             "retry": "重试",
             "delete_newline": "删除换行",
-            "translate_back": "翻译回原文"
+            "translate_back": "翻译回原文",
+            "from_cache_click_to_delete": "来自历史缓存（点击删除）",
+            "cache_deleted": "缓存条目已删除",
+            "cache_delete_failed": "删除缓存条目失败"
         },
         "recognize": {
             "recognize": "重新识别",

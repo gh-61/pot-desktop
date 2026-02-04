@@ -103,6 +103,7 @@
                 "source_target": "Origem+Destino",
                 "disable": "Desabilitar",
                 "history_disable": "Desabilitar Histórico",
+                "history_cache_enable": "Usar Histórico como Cache",
                 "incremental_translate": "Tradução Incremental",
                 "dynamic_translate": "Tradução Dinâmica",
                 "delete_newline": "Excluir Nova Linha",
@@ -458,7 +459,10 @@
             "copy": "Copiar",
             "delete_newline": "Excluir Quebra de Linha",
             "translate_back": "Tradução de volta ao original",
-            "retry": "Tentar novamente"
+            "retry": "Tentar novamente",
+            "from_cache_click_to_delete": "Do cache do histórico (clique para excluir)",
+            "cache_deleted": "Entrada do cache excluída",
+            "cache_delete_failed": "Falha ao excluir entrada do cache"
         },
         "recognize": {
             "recognize": "Reconhecimento",

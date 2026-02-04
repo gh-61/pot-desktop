@@ -359,7 +359,8 @@
                     "10": "Très très petit (10px)",
                     "18": "Grand (18px)"
                 },
-                "history_disable": "Désactiver l'historique"
+                "history_disable": "Désactiver l'historique",
+                "history_cache_enable": "Utiliser l'historique comme cache"
             },
             "backup": {
                 "local": "Local",
@@ -448,7 +449,10 @@
             "translate_back": "Revenir à la traduction d'origine",
             "translate": "Traduire",
             "copy": "Copier",
-            "speak": "Écouter"
+            "speak": "Écouter",
+            "from_cache_click_to_delete": "Depuis le cache historique (cliquer pour supprimer)",
+            "cache_deleted": "Entrée du cache supprimée",
+            "cache_delete_failed": "Échec de la suppression de l'entrée du cache"
         },
         "updater": {
             "installed": "Installation terminée. Relancez l'application pour que les modifications prennent effet",

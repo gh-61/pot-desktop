@@ -132,6 +132,7 @@
                 "source_target": "מקור+יעד",
                 "disable": "מבוטל",
                 "history_disable": "השבת היסטוריה",
+                "history_cache_enable": "השתמש בהיסטוריה כמטמון",
                 "remember_language": "זכור את שפת היעד",
                 "font_size": {
                     "title": "גודל גופן",
@@ -405,7 +406,10 @@
             "recognizing": "מזהה…",
             "translate_back": "תרגום חזרה למקור",
             "copy": "העתק",
-            "retry": "נסה שוב"
+            "retry": "נסה שוב",
+            "from_cache_click_to_delete": "ממטמון ההיסטוריה (לחץ למחיקה)",
+            "cache_deleted": "רשומת מטמון נמחקה",
+            "cache_delete_failed": "מחיקת רשומת מטמון נכשלה"
         },
         "recognize": {
             "translate": "תרגם",

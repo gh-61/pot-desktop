@@ -339,6 +339,7 @@
                 "local": "Local",
                 "disable": "Desativar",
                 "history_disable": "Desativar Histórico",
+                "history_cache_enable": "Usar Histórico como Cache",
                 "hide_window": "Ocultar Janela de Tradução",
                 "remember_window_size": "Lembrar do Tamanho da Janela",
                 "delete_newline": "Apagar Nova Linha",
@@ -448,7 +449,10 @@
             "translate_back": "Tradução de volta ao original",
             "translate": "Traduzir",
             "copy": "Copiar",
-            "speak": "Falar"
+            "speak": "Falar",
+            "from_cache_click_to_delete": "Da cache do histórico (clique para eliminar)",
+            "cache_deleted": "Entrada da cache eliminada",
+            "cache_delete_failed": "Falha ao eliminar entrada da cache"
         },
         "updater": {
             "installed": "Instalação concluída, reinicie a aplicação para que as alterações entrem em vigor",

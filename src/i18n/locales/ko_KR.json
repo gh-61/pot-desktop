@@ -148,6 +148,7 @@
                 "source_target": "출발 + 도착 언어",
                 "disable": "비활성화",
                 "history_disable": "기록 비활성화",
+                "history_cache_enable": "기록을 캐시로 사용",
                 "incremental_translate": "연속 번역",
                 "dynamic_translate": "동적 번역",
                 "delete_newline": "줄바꿈 삭제",
@@ -258,6 +259,11 @@
                 "telegram": "텔레그램",
                 "discussion": "GitHub 토론"
             }
+        },
+        "translate": {
+            "from_cache_click_to_delete": "기록 캐시에서 (삭제하려면 클릭)",
+            "cache_deleted": "캐시 항목이 삭제되었습니다",
+            "cache_delete_failed": "캐시 항목 삭제에 실패했습니다"
         },
         "updater": {
             "title": "업데이트 확인",

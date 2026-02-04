@@ -21,7 +21,7 @@ import { TbTransformFilled } from 'react-icons/tb';
 import { HiOutlineVolumeUp } from 'react-icons/hi';
 import { semanticColors } from '@nextui-org/theme';
 import toast, { Toaster } from 'react-hot-toast';
-import { MdContentCopy } from 'react-icons/md';
+import { MdContentCopy, MdHistory } from 'react-icons/md';
 import { useTranslation } from 'react-i18next';
 import Database from 'tauri-plugin-sql-api';
 import { GiCycle } from 'react-icons/gi';
@@ -65,11 +65,14 @@ export default function TargetArea(props) {
     const [ttsServiceList] = useConfig('tts_service_list', ['lingva_tts']);
     const [translateSecondLanguage] = useConfig('translate_second_language', 'en');
     const [historyDisable] = useConfig('history_disable', false);
+    const [historyCacheEnable] = useConfig('history_cache_enable', false);
     const [isLoading, setIsLoading] = useState(false);
     const [hide, setHide] = useState(true);
 
     const [result, setResult] = useState('');
     const [error, setError] = useState('');
+    const [isFromCache, setIsFromCache] = useState(false);
+    const [cacheInfo, setCacheInfo] = useState(null);
 
     const sourceText = useAtomValue(sourceTextAtom);
     const sourceLanguage = useAtomValue(sourceLanguageAtom);
@@ -96,6 +99,8 @@ export default function TargetArea(props) {
     useEffect(() => {
         setResult('');
         setError('');
+        setIsFromCache(false);
+        setCacheInfo(null);
         if (
             sourceText.trim() !== '' &&
             sourceLanguage &&
@@ -147,6 +152,45 @@ export default function TargetArea(props) {
             );
     };
 
+    const lookupHistoryCache = async (text, source, target, serviceName) => {
+        const db = await Database.load('sqlite:history.db');
+        try {
+            const result = await db.select(
+                'SELECT result FROM history WHERE text = $1 AND source = $2 AND target = $3 AND service = $4 ORDER BY timestamp DESC LIMIT 1',
+                [text, source, target, serviceName]
+            );
+            db.close();
+
+            if (result && result.length > 0) {
+                const cachedResult = result[0].result;
+                try {
+                    return JSON.parse(cachedResult);
+                } catch {
+                    return cachedResult;
+                }
+            }
+            return null;
+        } catch (e) {
+            db.close();
+            return null;
+        }
+    };
+
+    const deleteHistoryEntry = async (text, source, target, serviceName) => {
+        const db = await Database.load('sqlite:history.db');
+        try {
+            await db.execute(
+                'DELETE FROM history WHERE text = $1 AND source = $2 AND target = $3 AND service = $4',
+                [text, source, target, serviceName]
+            );
+            db.close();
+            return true;
+        } catch (e) {
+            db.close();
+            return false;
+        }
+    };
+
     function invokeOnce(fn) {
         let isInvoke = false;
 
@@ -172,6 +216,51 @@ export default function TargetArea(props) {
                 let newTargetLanguage = targetLanguage;
                 if (sourceLanguage === 'auto' && targetLanguage === detectLanguage) {
                     newTargetLanguage = translateSecondLanguage;
+                }
+                // Check history cache before making API request
+                if (historyCacheEnable && !historyDisable) {
+                    const cachedResult = await lookupHistoryCache(
+                        sourceText.trim(),
+                        detectLanguage,
+                        newTargetLanguage,
+                        translateServiceName
+                    );
+                    if (cachedResult !== null) {
+                        setResult(cachedResult);
+                        setIsLoading(false);
+                        setHide(false);
+                        setIsFromCache(true);
+                        setCacheInfo({
+                            text: sourceText.trim(),
+                            source: detectLanguage,
+                            target: newTargetLanguage,
+                            service: translateServiceName,
+                        });
+                        if (index === 0 && !clipboardMonitor && typeof cachedResult === 'string') {
+                            switch (autoCopy) {
+                                case 'target':
+                                    writeText(cachedResult).then(() => {
+                                        if (hideWindow) {
+                                            sendNotification({ title: t('common.write_clipboard'), body: cachedResult });
+                                        }
+                                    });
+                                    break;
+                                case 'source_target':
+                                    writeText(sourceText.trim() + '\n\n' + cachedResult).then(() => {
+                                        if (hideWindow) {
+                                            sendNotification({
+                                                title: t('common.write_clipboard'),
+                                                body: sourceText.trim() + '\n\n' + cachedResult,
+                                            });
+                                        }
+                                    });
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        return;
+                    }
                 }
                 setIsLoading(true);
                 setHide(true);
@@ -246,6 +335,51 @@ export default function TargetArea(props) {
                 let newTargetLanguage = targetLanguage;
                 if (sourceLanguage === 'auto' && targetLanguage === detectLanguage) {
                     newTargetLanguage = translateSecondLanguage;
+                }
+                // Check history cache before making API request
+                if (historyCacheEnable && !historyDisable) {
+                    const cachedResult = await lookupHistoryCache(
+                        sourceText.trim(),
+                        detectLanguage,
+                        newTargetLanguage,
+                        translateServiceName
+                    );
+                    if (cachedResult !== null) {
+                        setResult(cachedResult);
+                        setIsLoading(false);
+                        setHide(false);
+                        setIsFromCache(true);
+                        setCacheInfo({
+                            text: sourceText.trim(),
+                            source: detectLanguage,
+                            target: newTargetLanguage,
+                            service: translateServiceName,
+                        });
+                        if (index === 0 && !clipboardMonitor && typeof cachedResult === 'string') {
+                            switch (autoCopy) {
+                                case 'target':
+                                    writeText(cachedResult).then(() => {
+                                        if (hideWindow) {
+                                            sendNotification({ title: t('common.write_clipboard'), body: cachedResult });
+                                        }
+                                    });
+                                    break;
+                                case 'source_target':
+                                    writeText(sourceText.trim() + '\n\n' + cachedResult).then(() => {
+                                        if (hideWindow) {
+                                            sendNotification({
+                                                title: t('common.write_clipboard'),
+                                                body: sourceText.trim() + '\n\n' + cachedResult,
+                                            });
+                                        }
+                                    });
+                                    break;
+                                default:
+                                    break;
+                            }
+                        }
+                        return;
+                    }
                 }
                 setIsLoading(true);
                 setHide(true);
@@ -662,6 +796,33 @@ export default function TargetArea(props) {
                                     <MdContentCopy className='text-[16px]' />
                                 </Button>
                             </Tooltip>
+                            {/* history cache indicator */}
+                            {isFromCache && cacheInfo && (
+                                <Tooltip content={t('translate.from_cache_click_to_delete')}>
+                                    <Button
+                                        isIconOnly
+                                        variant='light'
+                                        size='sm'
+                                        onPress={async () => {
+                                            const deleted = await deleteHistoryEntry(
+                                                cacheInfo.text,
+                                                cacheInfo.source,
+                                                cacheInfo.target,
+                                                cacheInfo.service
+                                            );
+                                            if (deleted) {
+                                                setIsFromCache(false);
+                                                setCacheInfo(null);
+                                                toast.success(t('translate.cache_deleted'), { style: toastStyle });
+                                            } else {
+                                                toast.error(t('translate.cache_delete_failed'), { style: toastStyle });
+                                            }
+                                        }}
+                                    >
+                                        <MdHistory className='text-[16px] text-primary' />
+                                    </Button>
+                                </Tooltip>
+                            )}
                             {/* translate back button */}
                             <Tooltip content={t('translate.translate_back')}>
                                 <Button

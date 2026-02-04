@@ -70,7 +70,9 @@
                 "font_size": {}
             },
             "translate": {
-                "font_size": {}
+                "font_size": {},
+                "history_disable": "Geçmişi devre dışı bırak",
+                "history_cache_enable": "Geçmişi önbellek olarak kullan"
             },
             "backup": {},
             "recognize": {},
@@ -79,7 +81,11 @@
             "about": {},
             "history": {}
         },
-        "translate": {},
+        "translate": {
+            "from_cache_click_to_delete": "Geçmiş önbelleğinden (silmek için tıklayın)",
+            "cache_deleted": "Önbellek girişi silindi",
+            "cache_delete_failed": "Önbellek girişi silinemedi"
+        },
         "updater": {},
         "recognize": {}
     }

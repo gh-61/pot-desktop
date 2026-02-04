@@ -103,6 +103,7 @@
                 "source_target": "原文+譯文",
                 "disable": "停用",
                 "history_disable": "停用歷史記錄",
+                "history_cache_enable": "使用歷史記錄作為快取",
                 "incremental_translate": "增量翻譯",
                 "dynamic_translate": "動態翻譯",
                 "delete_newline": "自動刪除換行",
@@ -455,7 +456,10 @@
             "copy": "複製",
             "retry": "重試",
             "delete_newline": "刪除換行",
-            "translate_back": "翻譯回原文"
+            "translate_back": "翻譯回原文",
+            "from_cache_click_to_delete": "來自歷史快取（點擊刪除）",
+            "cache_deleted": "快取條目已刪除",
+            "cache_delete_failed": "刪除快取條目失敗"
         },
         "recognize": {
             "recognize": "辨識",

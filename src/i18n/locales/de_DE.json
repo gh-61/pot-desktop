@@ -102,6 +102,7 @@
                 "source_target": "Quelltext + Übersetzung",
                 "disable": "Deaktivieren",
                 "history_disable": "Verlauf deaktivieren",
+                "history_cache_enable": "Verlauf als Cache verwenden",
                 "incremental_translate": "Inkrementelle Übersetzung",
                 "dynamic_translate": "Dynamische Übersetzung",
                 "delete_newline": "Automatisches Löschen von Zeilenumbrüchen",
@@ -439,7 +440,10 @@
             "copy": "Kopieren",
             "retry": "Erneut versuchen",
             "delete_newline": "Zeilenumbruch löschen",
-            "translate_back": "In Ursprungssprache übersetzen"
+            "translate_back": "In Ursprungssprache übersetzen",
+            "from_cache_click_to_delete": "Aus dem Verlauf-Cache (zum Löschen klicken)",
+            "cache_deleted": "Cache-Eintrag gelöscht",
+            "cache_delete_failed": "Löschen des Cache-Eintrags fehlgeschlagen"
         },
         "recognize": {
             "recognize": "Erneut erkennen",

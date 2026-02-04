@@ -279,7 +279,9 @@
                 "hide_source": "Nascondi area di origine",
                 "baidu": "Baidu",
                 "incremental_translate": "Traduzione incrementale",
-                "target_language": "Lingua di destinazione"
+                "target_language": "Lingua di destinazione",
+                "history_disable": "Disabilita cronologia",
+                "history_cache_enable": "Usa cronologia come cache"
             },
             "backup": {
                 "local": "Locale",
@@ -410,7 +412,10 @@
             "translate_back": "Traduzione riportata all'originale",
             "translate": "Traduci",
             "copy": "Copia",
-            "speak": "Parla"
+            "speak": "Parla",
+            "from_cache_click_to_delete": "Dalla cache della cronologia (clicca per eliminare)",
+            "cache_deleted": "Voce cache eliminata",
+            "cache_delete_failed": "Eliminazione voce cache fallita"
         },
         "updater": {
             "installed": "Installazione completata, riavviare l'applicazione affinché le modifiche abbiano effetto",

@@ -38,6 +38,10 @@
                 "app_fallback_font": "Yza gaýdýan şrift",
                 "dev_mode": "Developer mody",
                 "server_port_change": "Serwer porty üýtgedildi, üýtgeşmeleriň güýje girmegi üçin programmany täzeden açyň"
+            },
+            "translate": {
+                "history_disable": "Taryhy öçüriň",
+                "history_cache_enable": "Taryhy keş hökmünde ulanyň"
             }
         },
         "languages": {
@@ -81,6 +85,11 @@
             "plugin": "Plugin",
             "coming": "Tiz ýakynda…",
             "clear": "Arassala"
+        },
+        "translate": {
+            "from_cache_click_to_delete": "Taryh keşinden (pozmak üçin basyň)",
+            "cache_deleted": "Keş ýazgysy pozuldy",
+            "cache_delete_failed": "Keş ýazgysyny pozmak başartmady"
         }
     }
 }

@@ -99,6 +99,7 @@
                 "source": "المصدر",
                 "disable": "معطل",
                 "history_disable": "عطل السجل",
+                "history_cache_enable": "استخدام السجل كذاكرة مؤقتة",
                 "target_language": "اللغة المستهدفة",
                 "second_language": "اللغة المستهدفة الثانوية",
                 "target": "المستهدف",
@@ -240,7 +241,10 @@
             "speak": "تكلم",
             "add_collection_success": "تمت الإضافة إلى المجموعة بنجاح",
             "recognizing": "جاري التعرف",
-            "translate_back": "إعادة الترجمة الى النص الاصلي"
+            "translate_back": "إعادة الترجمة الى النص الاصلي",
+            "from_cache_click_to_delete": "من ذاكرة التخزين المؤقت (انقر للحذف)",
+            "cache_deleted": "تم حذف إدخال ذاكرة التخزين المؤقت",
+            "cache_delete_failed": "فشل حذف إدخال ذاكرة التخزين المؤقت"
         },
         "services": {
             "collection": {

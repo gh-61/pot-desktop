@@ -70,7 +70,9 @@
                 "font_size": {}
             },
             "translate": {
-                "font_size": {}
+                "font_size": {},
+                "history_disable": "Deaktiver historikk",
+                "history_cache_enable": "Bruk historikk som hurtigbuffer"
             },
             "backup": {},
             "recognize": {},
@@ -79,7 +81,11 @@
             "about": {},
             "history": {}
         },
-        "translate": {},
+        "translate": {
+            "from_cache_click_to_delete": "Fra historikk-hurtigbuffer (klikk for å slette)",
+            "cache_deleted": "Hurtigbuffer-oppføring slettet",
+            "cache_delete_failed": "Kunne ikke slette hurtigbuffer-oppføring"
+        },
         "updater": {},
         "recognize": {}
     }
