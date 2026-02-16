@@ -36,7 +36,7 @@ export default function App() {
     const { i18n } = useTranslation();
 
     useEffect(() => {
-        store.load();
+        store.reload();
     }, []);
 
     useEffect(() => {

@@ -114,6 +114,7 @@ pub fn config_window() {
         .unwrap();
     window.set_size(tauri::LogicalSize::new(800, 600)).unwrap();
     window.center().unwrap();
+    window.show().unwrap();
 }
 
 fn translate_window() -> tauri::WebviewWindow {
@@ -131,6 +132,7 @@ fn translate_window() -> tauri::WebviewWindow {
         return window;
     }
     window.set_skip_taskbar(true).unwrap();
+    window.show().unwrap();
     // Get Translate Window Size
     let width = match get("translate_window_width") {
         Some(v) => v.as_i64().unwrap(),
@@ -303,6 +305,7 @@ pub fn recognize_window() {
         ))
         .unwrap();
     window.center().unwrap();
+    window.show().unwrap();
     window.emit("new_image", "").unwrap();
 }
 
@@ -323,6 +326,7 @@ fn screenshot_window() -> tauri::WebviewWindow {
     window.set_fullscreen(true).unwrap();
 
     window.set_always_on_top(true).unwrap();
+    window.show().unwrap();
     window
 }
 
@@ -402,4 +406,5 @@ pub fn updater_window() {
         .unwrap();
     window.set_size(tauri::LogicalSize::new(600, 400)).unwrap();
     window.center().unwrap();
+    window.show().unwrap();
 }

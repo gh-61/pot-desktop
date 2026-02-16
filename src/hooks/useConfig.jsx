@@ -25,7 +25,7 @@ export const useConfig = (key, defaultValue, options = {}) => {
             setPropertyState(v);
         } else {
             store.get(key).then((v) => {
-                if (v === null) {
+                if (v == null) {
                     setPropertyState(defaultValue);
                     store.set(key, defaultValue);
                     store.save();
@@ -59,9 +59,9 @@ export const useConfig = (key, defaultValue, options = {}) => {
     return [property, setProperty, getProperty];
 };
 
-export const deleteKey = (key) => {
-    if (store.has(key)) {
-        store.delete(key);
-        store.save();
+export const deleteKey = async (key) => {
+    if (await store.has(key)) {
+        await store.delete(key);
+        await store.save();
     }
 };

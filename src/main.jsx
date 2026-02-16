@@ -15,15 +15,19 @@ if (import.meta.env.PROD) {
     });
 }
 
-initStore().then(async () => {
-    await initEnv();
-    const rootElement = document.getElementById('root');
-    const root = ReactDOM.createRoot(rootElement);
-    root.render(
-        <NextUIProvider>
-            <NextThemesProvider attribute='class'>
-                <App />
-            </NextThemesProvider>
-        </NextUIProvider>
-    );
-});
+initStore()
+    .catch((e) => {
+        console.error('Failed to initialize store:', e);
+    })
+    .then(async () => {
+        await initEnv();
+        const rootElement = document.getElementById('root');
+        const root = ReactDOM.createRoot(rootElement);
+        root.render(
+            <NextUIProvider>
+                <NextThemesProvider attribute='class'>
+                    <App />
+                </NextThemesProvider>
+            </NextUIProvider>
+        );
+    });
