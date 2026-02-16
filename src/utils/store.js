@@ -1,7 +1,7 @@
-import { Store } from 'tauri-plugin-store-api';
+import { Store } from '@tauri-apps/plugin-store';
 import { appConfigDir, join } from '@tauri-apps/api/path';
-import { watch } from 'tauri-plugin-fs-watch-api';
-import { invoke } from '@tauri-apps/api';
+import { watch } from '@tauri-apps/plugin-fs';
+import { invoke } from '@tauri-apps/api/core';
 
 export let store = new Store();
 

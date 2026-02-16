@@ -1,4 +1,4 @@
-import { fetch } from '@tauri-apps/api/http';
+import { fetch } from '@tauri-apps/plugin-http';
 import { Language } from './info';
 
 class Pronunciation {
@@ -46,13 +46,13 @@ export async function translate(text, from, to) {
         headers: {
             'Content-Type': 'text/html;charset=UTF-8',
         },
-        responseType: 2,
     });
 
     if (!res.ok) {
-        throw new Error(`Http Request Error\nHttp Status: ${res.status}\n${JSON.stringify(res.data)}`);
+        throw new Error(`Http Request Error\nHttp Status: ${res.status}\n${await res.text()}`);
     }
-    const doc = new DOMParser().parseFromString(res.data, 'text/html');
+    const htmlText = await res.text();
+    const doc = new DOMParser().parseFromString(htmlText, 'text/html');
     const entryNodes = doc.querySelectorAll('.pr.entry-body__el');
     if (entryNodes.length === 0) {
         throw new Error(`Words not yet included: ${text}`);
@@ -88,9 +88,10 @@ export async function translate(text, from, to) {
         return dict;
     }, {});
     for (let i of resultMap.result.pronunciations) {
-        const res = await fetch(i.voice, { responseType: 3 });
+        const res = await fetch(i.voice);
         if (res.ok) {
-            i.voice = res.data;
+            const buf = await res.arrayBuffer();
+            i.voice = Array.from(new Uint8Array(buf));
         }
     }
     return resultMap.result;

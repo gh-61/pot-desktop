@@ -1,35 +1,32 @@
-use std::fs;
-
 use crate::config::get;
 use crate::config::set;
 use crate::StringWrapper;
 use crate::APP;
-use dirs::cache_dir;
 use log::{info, warn};
+use tauri::window::{Monitor, Window};
 use tauri::Manager;
-use tauri::Monitor;
-use tauri::Window;
-use tauri::WindowBuilder;
-#[cfg(any(target_os = "macos", target_os = "windows"))]
-use window_shadows::set_shadow;
+use tauri::{Emitter, Listener};
+use tauri::WebviewUrl;
+use tauri::WebviewWindowBuilder;
 
 // Get daemon window instance
 fn get_daemon_window() -> Window {
     let app_handle = APP.get().unwrap();
-    match app_handle.get_window("daemon") {
-        Some(v) => v,
+    match app_handle.get_webview_window("daemon") {
+        Some(v) => v.as_ref().window().clone(),
         None => {
             warn!("Daemon window not found, create new daemon window!");
-            WindowBuilder::new(
+            let ww = WebviewWindowBuilder::new(
                 app_handle,
                 "daemon",
-                tauri::WindowUrl::App("daemon.html".into()),
+                WebviewUrl::App("daemon.html".into()),
             )
             .title("Daemon")
             .additional_browser_args("--disable-web-security")
             .visible(false)
             .build()
-            .unwrap()
+            .unwrap();
+            ww.as_ref().window().clone()
         }
     }
 }
@@ -58,7 +55,7 @@ fn get_current_monitor(x: i32, y: i32) -> Monitor {
 }
 
 // Creating a window on the mouse monitor
-fn build_window(label: &str, title: &str) -> (Window, bool) {
+fn build_window(label: &str, title: &str) -> (tauri::WebviewWindow, bool) {
     use mouse_position::mouse_position::{Mouse, Position};
 
     let mouse_position = match Mouse::get_mouse_position() {
@@ -72,7 +69,7 @@ fn build_window(label: &str, title: &str) -> (Window, bool) {
     let position = current_monitor.position();
 
     let app_handle = APP.get().unwrap();
-    match app_handle.get_window(label) {
+    match app_handle.get_webview_window(label) {
         Some(v) => {
             info!("Window existence: {}", label);
             v.set_focus().unwrap();
@@ -80,16 +77,13 @@ fn build_window(label: &str, title: &str) -> (Window, bool) {
         }
         None => {
             info!("Window not existence, Creating new window: {}", label);
-            let mut builder = tauri::WindowBuilder::new(
-                app_handle,
-                label,
-                tauri::WindowUrl::App("index.html".into()),
-            )
-            .position(position.x.into(), position.y.into())
-            .additional_browser_args("--disable-web-security")
-            .focused(true)
-            .title(title)
-            .visible(false);
+            let mut builder =
+                WebviewWindowBuilder::new(app_handle, label, WebviewUrl::App("index.html".into()))
+                    .position(position.x.into(), position.y.into())
+                    .additional_browser_args("--disable-web-security")
+                    .focused(true)
+                    .title(title)
+                    .visible(false);
 
             #[cfg(target_os = "macos")]
             {
@@ -105,7 +99,7 @@ fn build_window(label: &str, title: &str) -> (Window, bool) {
 
             if label != "screenshot" {
                 #[cfg(not(target_os = "linux"))]
-                set_shadow(&window, true).unwrap_or_default();
+                window.set_shadow(true).unwrap_or_default();
             }
             let _ = window.current_monitor();
             (window, false)
@@ -122,7 +116,7 @@ pub fn config_window() {
     window.center().unwrap();
 }
 
-fn translate_window() -> Window {
+fn translate_window() -> tauri::WebviewWindow {
     use mouse_position::mouse_position::{Mouse, Position};
     // Mouse physical position
     let mut mouse_position = match Mouse::get_mouse_position() {
@@ -313,7 +307,7 @@ pub fn recognize_window() {
 }
 
 #[cfg(not(target_os = "macos"))]
-fn screenshot_window() -> Window {
+fn screenshot_window() -> tauri::WebviewWindow {
     let (window, _exists) = build_window("screenshot", "Screenshot");
 
     window.set_skip_taskbar(true).unwrap();
@@ -337,7 +331,7 @@ pub fn ocr_recognize() {
     {
         let app_handle = APP.get().unwrap();
         let mut app_cache_dir_path = cache_dir().expect("Get Cache Dir Failed");
-        app_cache_dir_path.push(&app_handle.config().tauri.bundle.identifier);
+        app_cache_dir_path.push(&app_handle.config().identifier);
         if !app_cache_dir_path.exists() {
             // 创建目录
             fs::create_dir_all(&app_cache_dir_path).expect("Create Cache Dir Failed");
@@ -370,7 +364,7 @@ pub fn ocr_translate() {
     {
         let app_handle = APP.get().unwrap();
         let mut app_cache_dir_path = cache_dir().expect("Get Cache Dir Failed");
-        app_cache_dir_path.push(&app_handle.config().tauri.bundle.identifier);
+        app_cache_dir_path.push(&app_handle.config().identifier);
         if !app_cache_dir_path.exists() {
             // 创建目录
             fs::create_dir_all(&app_cache_dir_path).expect("Create Cache Dir Failed");

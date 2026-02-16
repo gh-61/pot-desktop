@@ -1,4 +1,4 @@
-import { fetch } from '@tauri-apps/api/http';
+import { fetch } from '@tauri-apps/plugin-http';
 import CryptoJS from 'crypto-js';
 import { iflytek_auth } from '../iflytek';
 
@@ -53,7 +53,7 @@ export async function recognize(base64, language, options = {}) {
 
     // 处理结果
     if (!res.ok) {
-        throw `Http Request Error\nHttp Status: ${res.status}\n${JSON.stringify(res.data)}`;
+        throw `Http Request Error\nHttp Status: ${res.status}\n${await res.text()}`;
     }
     let data = res['data'];
     if (!data) {

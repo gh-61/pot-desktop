@@ -1,10 +1,11 @@
 use crate::window::text_translate;
+use arboard::Clipboard;
 use std::sync::Mutex;
-use tauri::{ClipboardManager, Manager};
 
 pub struct ClipboardMonitorEnableWrapper(pub Mutex<String>);
 
 pub fn start_clipboard_monitor(app_handle: tauri::AppHandle) {
+    use tauri::Manager;
     tauri::async_runtime::spawn(async move {
         let mut pre_text = "".to_string();
         loop {
@@ -12,15 +13,12 @@ pub fn start_clipboard_monitor(app_handle: tauri::AppHandle) {
             let state = handle.state::<ClipboardMonitorEnableWrapper>();
             if let Ok(clipboard_monitor) = state.0.try_lock() {
                 if clipboard_monitor.contains("true") {
-                    if let Ok(result) = app_handle.clipboard_manager().read_text() {
-                        match result {
-                            Some(v) => {
-                                if v != pre_text {
-                                    text_translate(v.clone());
-                                    pre_text = v;
-                                }
+                    if let Ok(mut clipboard) = Clipboard::new() {
+                        if let Ok(text) = clipboard.get_text() {
+                            if text != pre_text {
+                                text_translate(text.clone());
+                                pre_text = text;
                             }
-                            None => {}
                         }
                     }
                 } else {
