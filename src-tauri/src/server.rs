@@ -1,6 +1,7 @@
 use crate::config::{get, set};
 use crate::window::*;
 use log::{info, warn};
+use std::panic;
 use std::thread;
 use tiny_http::{Request, Response, Server};
 
@@ -25,7 +26,13 @@ pub fn start_server() {
             }
         };
         for request in server.incoming_requests() {
-            http_handle(request);
+            let url = request.url().to_string();
+            let result = panic::catch_unwind(panic::AssertUnwindSafe(|| {
+                http_handle(request);
+            }));
+            if let Err(e) = result {
+                warn!("Handler panicked for {}: {:?}", url, e);
+            }
         }
     });
 }
@@ -55,7 +62,9 @@ fn handle_config(request: Request) {
 
 fn handle_translate(mut request: Request) {
     let mut content = String::new();
-    request.as_reader().read_to_string(&mut content).unwrap();
+    if let Err(e) = request.as_reader().read_to_string(&mut content) {
+        warn!("Failed to read request body: {}", e);
+    }
     text_translate(content);
     response_ok(request);
 }
@@ -90,5 +99,7 @@ fn handle_ocr_translate(request: Request) {
 
 fn response_ok(request: Request) {
     let response = Response::from_string("ok");
-    request.respond(response).unwrap();
+    if let Err(e) = request.respond(response) {
+        warn!("Failed to send response: {}", e);
+    }
 }
