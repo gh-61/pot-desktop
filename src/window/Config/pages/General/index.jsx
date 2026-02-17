@@ -74,6 +74,9 @@ export default function General() {
         });
         invoke('font_list').then((v) => {
             setFontList(v);
+        }).catch((e) => {
+            console.error('Failed to load font list:', e);
+            setFontList([]);
         });
     }, []);
 

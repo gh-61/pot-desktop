@@ -168,23 +168,32 @@ export default function Translate() {
         let temp = {};
         for (const serviceType of serviceTypeList) {
             temp[serviceType] = {};
-            if (await exists(`plugins/${serviceType}`, { baseDir: BaseDirectory.AppConfig })) {
-                const plugins = await readDir(`plugins/${serviceType}`, { baseDir: BaseDirectory.AppConfig });
-                for (const plugin of plugins) {
-                    const infoStr = await readTextFile(`plugins/${serviceType}/${plugin.name}/info.json`, {
-                        baseDir: BaseDirectory.AppConfig,
-                    });
-                    let pluginInfo = JSON.parse(infoStr);
-                    if ('icon' in pluginInfo) {
-                        const appConfigDirPath = await appConfigDir();
-                        const iconPath = await join(
-                            appConfigDirPath,
-                            `/plugins/${serviceType}/${plugin.name}/${pluginInfo.icon}`
-                        );
-                        pluginInfo.icon = convertFileSrc(iconPath);
+            try {
+                if (await exists(`plugins/${serviceType}`, { baseDir: BaseDirectory.AppConfig })) {
+                    const plugins = await readDir(`plugins/${serviceType}`, { baseDir: BaseDirectory.AppConfig });
+                    for (const plugin of plugins) {
+                        if (plugin.isFile) continue;
+                        try {
+                            const infoStr = await readTextFile(`plugins/${serviceType}/${plugin.name}/info.json`, {
+                                baseDir: BaseDirectory.AppConfig,
+                            });
+                            let pluginInfo = JSON.parse(infoStr);
+                            if ('icon' in pluginInfo) {
+                                const appConfigDirPath = await appConfigDir();
+                                const iconPath = await join(
+                                    appConfigDirPath,
+                                    `/plugins/${serviceType}/${plugin.name}/${pluginInfo.icon}`
+                                );
+                                pluginInfo.icon = convertFileSrc(iconPath);
+                            }
+                            temp[serviceType][plugin.name] = pluginInfo;
+                        } catch (e) {
+                            console.error(`Failed to load plugin ${plugin.name}:`, e);
+                        }
                     }
-                    temp[serviceType][plugin.name] = pluginInfo;
                 }
+            } catch (e) {
+                console.error(`Failed to load plugins for ${serviceType}:`, e);
             }
         }
         setPluginList({ ...temp });
@@ -198,20 +207,25 @@ export default function Translate() {
     }, []);
 
     const loadServiceInstanceConfigMap = async () => {
-        const config = {};
-        for (const serviceInstanceKey of translateServiceInstanceList) {
-            config[serviceInstanceKey] = (await store.get(serviceInstanceKey)) ?? {};
+        try {
+            const config = {};
+            for (const serviceInstanceKey of translateServiceInstanceList) {
+                config[serviceInstanceKey] = (await store.get(serviceInstanceKey)) ?? {};
+            }
+            for (const serviceInstanceKey of recognizeServiceInstanceList) {
+                config[serviceInstanceKey] = (await store.get(serviceInstanceKey)) ?? {};
+            }
+            for (const serviceInstanceKey of ttsServiceInstanceList) {
+                config[serviceInstanceKey] = (await store.get(serviceInstanceKey)) ?? {};
+            }
+            for (const serviceInstanceKey of collectionServiceInstanceList) {
+                config[serviceInstanceKey] = (await store.get(serviceInstanceKey)) ?? {};
+            }
+            setServiceInstanceConfigMap({ ...config });
+        } catch (e) {
+            console.error('Failed to load service instance config map:', e);
+            setServiceInstanceConfigMap({});
         }
-        for (const serviceInstanceKey of recognizeServiceInstanceList) {
-            config[serviceInstanceKey] = (await store.get(serviceInstanceKey)) ?? {};
-        }
-        for (const serviceInstanceKey of ttsServiceInstanceList) {
-            config[serviceInstanceKey] = (await store.get(serviceInstanceKey)) ?? {};
-        }
-        for (const serviceInstanceKey of collectionServiceInstanceList) {
-            config[serviceInstanceKey] = (await store.get(serviceInstanceKey)) ?? {};
-        }
-        setServiceInstanceConfigMap({ ...config });
     };
     useEffect(() => {
         if (

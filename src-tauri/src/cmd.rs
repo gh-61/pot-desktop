@@ -3,7 +3,7 @@ use crate::config::StoreWrapper;
 use crate::error::Error;
 use crate::StringWrapper;
 use crate::APP;
-use log::{error, info};
+use log::{error, info, warn};
 use serde_json::{json, Value};
 use std::io::Read;
 use tauri::Manager;
@@ -191,6 +191,8 @@ pub fn run_binary(
     let config_path = config_path.join(plugin_type);
     let plugin_path = config_path.join(plugin_name);
 
+    info!("run_binary: cmd={}, plugin_path={:?}, args={:?}", cmd_name, plugin_path, args);
+
     #[cfg(target_os = "windows")]
     let mut cmd = Command::new("cmd");
     #[cfg(target_os = "windows")]
@@ -200,7 +202,11 @@ pub fn run_binary(
     #[cfg(not(target_os = "windows"))]
     let mut cmd = Command::new(&cmd_name);
 
-    let output = cmd.args(args).current_dir(plugin_path).output()?;
+    let output = cmd.args(&args).current_dir(&plugin_path).output().map_err(|e| {
+        warn!("run_binary failed: cmd={}, plugin_path={:?}, error={}", cmd_name, plugin_path, e);
+        e
+    })?;
+    info!("run_binary result: status={}, stderr_len={}", output.status.code().unwrap_or(-1), output.stderr.len());
     Ok(json!({
         "stdout": String::from_utf8_lossy(&output.stdout).to_string(),
         "stderr": String::from_utf8_lossy(&output.stderr).to_string(),

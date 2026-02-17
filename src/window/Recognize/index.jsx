@@ -60,32 +60,46 @@ export default function Recognize() {
 
     const loadPluginList = async () => {
         let temp = {};
-        if (await exists(`plugins/recognize`, { baseDir: BaseDirectory.AppConfig })) {
-            const plugins = await readDir(`plugins/recognize`, { baseDir: BaseDirectory.AppConfig });
-            for (const plugin of plugins) {
-                const infoStr = await readTextFile(`plugins/recognize/${plugin.name}/info.json`, {
-                    baseDir: BaseDirectory.AppConfig,
-                });
-                let pluginInfo = JSON.parse(infoStr);
-                if ('icon' in pluginInfo) {
-                    const appConfigDirPath = await appConfigDir();
-                    const iconPath = await join(
-                        appConfigDirPath,
-                        `/plugins/recognize/${plugin.name}/${pluginInfo.icon}`
-                    );
-                    pluginInfo.icon = convertFileSrc(iconPath);
+        try {
+            if (await exists(`plugins/recognize`, { baseDir: BaseDirectory.AppConfig })) {
+                const plugins = await readDir(`plugins/recognize`, { baseDir: BaseDirectory.AppConfig });
+                for (const plugin of plugins) {
+                    if (plugin.isFile) continue;
+                    try {
+                        const infoStr = await readTextFile(`plugins/recognize/${plugin.name}/info.json`, {
+                            baseDir: BaseDirectory.AppConfig,
+                        });
+                        let pluginInfo = JSON.parse(infoStr);
+                        if ('icon' in pluginInfo) {
+                            const appConfigDirPath = await appConfigDir();
+                            const iconPath = await join(
+                                appConfigDirPath,
+                                `/plugins/recognize/${plugin.name}/${pluginInfo.icon}`
+                            );
+                            pluginInfo.icon = convertFileSrc(iconPath);
+                        }
+                        temp[plugin.name] = pluginInfo;
+                    } catch (e) {
+                        console.error(`Failed to load plugin ${plugin.name}:`, e);
+                    }
                 }
-                temp[plugin.name] = pluginInfo;
             }
+        } catch (e) {
+            console.error('Failed to load recognize plugins:', e);
         }
         setPluginList({ ...temp });
     };
     const loadServiceInstanceConfigMap = async () => {
-        const config = {};
-        for (const serviceInstanceKey of serviceInstanceList) {
-            config[serviceInstanceKey] = (await store.get(serviceInstanceKey)) ?? {};
+        try {
+            const config = {};
+            for (const serviceInstanceKey of serviceInstanceList) {
+                config[serviceInstanceKey] = (await store.get(serviceInstanceKey)) ?? {};
+            }
+            setServiceInstanceConfigMap({ ...config });
+        } catch (e) {
+            console.error('Failed to load service instance config map:', e);
+            setServiceInstanceConfigMap({});
         }
-        setServiceInstanceConfigMap({ ...config });
     };
     useEffect(() => {
         if (serviceInstanceList !== null) {

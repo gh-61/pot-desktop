@@ -311,6 +311,14 @@ pub fn recognize_window() {
 
 #[cfg(not(target_os = "macos"))]
 fn screenshot_window() -> tauri::WebviewWindow {
+    // Close existing screenshot window to ensure a fresh screenshot cycle
+    let app_handle = APP.get().unwrap();
+    if let Some(existing) = app_handle.get_webview_window("screenshot") {
+        let _ = existing.close();
+        // Small delay to let the window close
+        std::thread::sleep(std::time::Duration::from_millis(100));
+    }
+
     let (window, _exists) = build_window("screenshot", "Screenshot");
 
     window.set_skip_taskbar(true).unwrap();
@@ -326,7 +334,7 @@ fn screenshot_window() -> tauri::WebviewWindow {
     window.set_fullscreen(true).unwrap();
 
     window.set_always_on_top(true).unwrap();
-    window.show().unwrap();
+    // Don't show here - JS shows the window after capturing and loading the screenshot image
     window
 }
 

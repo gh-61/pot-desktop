@@ -27,6 +27,9 @@ export default function Screenshot() {
                         setImgurl(convertFileSrc(filePath));
                     });
                 });
+            }).catch(async (e) => {
+                warn('Screenshot capture failed: ' + e);
+                await appWindow.close();
             });
         });
     }, []);

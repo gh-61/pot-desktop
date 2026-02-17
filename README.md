@@ -338,7 +338,19 @@ GET "/ocr_translate?screenshot=true" => 截图翻译,
 在 Linux 下调用 Flameshot 进行截图 OCR:
 
 ```bash
-rm ~/.cache/com.pot-app.desktop/pot_screenshot_cut.png && flameshot gui -s -p ~/.cache/com.pot-app.desktop/pot_screenshot_cut.png && curl "127.0.0.1:60828/ocr_recognize?screenshot=false"
+rm -f ~/.cache/com.pot-app.desktop/pot_screenshot_cut.png && flameshot gui -s -p ~/.cache/com.pot-app.desktop/pot_screenshot_cut.png && curl "127.0.0.1:60828/ocr_recognize?screenshot=false"
+```
+
+在 Linux 下调用 Flameshot 进行截图翻译:
+
+```bash
+rm -f ~/.cache/com.pot-app.desktop/pot_screenshot_cut.png && flameshot gui -s -p ~/.cache/com.pot-app.desktop/pot_screenshot_cut.png && curl "127.0.0.1:60828/ocr_translate?screenshot=false"
+```
+
+在 Linux KDE 下调用 Spectacle 进行截图翻译:
+
+```bash
+spectacle -r -b -n -e -o ~/.cache/com.pot-app.desktop/pot_screenshot_cut.png && curl "127.0.0.1:60828/ocr_translate?screenshot=false"
 ```
 
 ## 现有用法 (快捷划词翻译)

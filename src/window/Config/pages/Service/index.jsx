@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Tabs, Tab } from '@nextui-org/react';
 import { appConfigDir, join } from '@tauri-apps/api/path';
 import { convertFileSrc } from '@tauri-apps/api/core';
+import { info, warn } from '@tauri-apps/plugin-log';
 import React, { useEffect, useState } from 'react';
 import Translate from './Translate';
 import Recognize from './Recognize';
@@ -23,28 +24,38 @@ export default function Service() {
         for (const serviceType of serviceTypeList) {
             temp[serviceType] = {};
             try {
-                if (await exists(`plugins/${serviceType}`, { baseDir: BaseDirectory.AppConfig })) {
+                const dirExists = await exists(`plugins/${serviceType}`, { baseDir: BaseDirectory.AppConfig });
+                await info(`[loadPluginList] ${serviceType}: dirExists=${dirExists}`);
+                if (dirExists) {
                     const plugins = await readDir(`plugins/${serviceType}`, { baseDir: BaseDirectory.AppConfig });
+                    await info(`[loadPluginList] ${serviceType}: readDir returned ${plugins.length} entries: ${JSON.stringify(plugins.map(p => ({name: p.name, isFile: p.isFile, isDirectory: p.isDirectory})))}`);
                     for (const plugin of plugins) {
-                        const infoStr = await readTextFile(`plugins/${serviceType}/${plugin.name}/info.json`, {
-                            baseDir: BaseDirectory.AppConfig,
-                        });
-                        let pluginInfo = JSON.parse(infoStr);
-                        if ('icon' in pluginInfo) {
-                            const appConfigDirPath = await appConfigDir();
-                            const iconPath = await join(
-                                appConfigDirPath,
-                                `/plugins/${serviceType}/${plugin.name}/${pluginInfo.icon}`
-                            );
-                            pluginInfo.icon = convertFileSrc(iconPath);
+                        if (plugin.isFile) continue;
+                        try {
+                            const infoStr = await readTextFile(`plugins/${serviceType}/${plugin.name}/info.json`, {
+                                baseDir: BaseDirectory.AppConfig,
+                            });
+                            let pluginInfo = JSON.parse(infoStr);
+                            if ('icon' in pluginInfo) {
+                                const appConfigDirPath = await appConfigDir();
+                                const iconPath = await join(
+                                    appConfigDirPath,
+                                    `/plugins/${serviceType}/${plugin.name}/${pluginInfo.icon}`
+                                );
+                                pluginInfo.icon = convertFileSrc(iconPath);
+                            }
+                            temp[serviceType][plugin.name] = pluginInfo;
+                            await info(`[loadPluginList] Loaded plugin: ${serviceType}/${plugin.name}`);
+                        } catch (e) {
+                            await warn(`[loadPluginList] Failed to load plugin ${plugin.name}: ${e}`);
                         }
-                        temp[serviceType][plugin.name] = pluginInfo;
                     }
                 }
             } catch (e) {
-                console.error(`Failed to load plugins for ${serviceType}:`, e);
+                await warn(`[loadPluginList] Failed to load plugins for ${serviceType}: ${e}`);
             }
         }
+        await info(`[loadPluginList] Final result: ${JSON.stringify(Object.keys(temp).map(k => `${k}: [${Object.keys(temp[k]).join(', ')}]`))}`);
         setPluginList({ ...temp });
     };
 

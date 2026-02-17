@@ -12,11 +12,15 @@ pub fn start_server() {
             60828
         }
     };
+    info!("Starting HTTP server on 127.0.0.1:{}", port);
     thread::spawn(move || {
         let server = match Server::http(format!("127.0.0.1:{port}")) {
-            Ok(v) => v,
+            Ok(v) => {
+                info!("HTTP server started successfully on port {}", port);
+                v
+            }
             Err(e) => {
-                warn!("Server start failed: {}", e);
+                warn!("Server start failed on port {}: {}", port, e);
                 return;
             }
         };

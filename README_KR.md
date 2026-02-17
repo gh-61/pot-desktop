@@ -335,7 +335,19 @@ OCR 및 번역을 위해서 pot은 자체 스크린샷(화면캡쳐)기능을 �
 리눅스에서 Flameshot을 활용한 OCR:
 
 ```bash
-rm ~/.cache/com.pot-app.desktop/pot_screenshot_cut.png && flameshot gui -s -p ~/.cache/com.pot-app.desktop/pot_screenshot_cut.png && curl "127.0.0.1:60828/ocr_recognize?screenshot=false"
+rm -f ~/.cache/com.pot-app.desktop/pot_screenshot_cut.png && flameshot gui -s -p ~/.cache/com.pot-app.desktop/pot_screenshot_cut.png && curl "127.0.0.1:60828/ocr_recognize?screenshot=false"
+```
+
+리눅스에서 Flameshot을 활용한 스크린샷 번역:
+
+```bash
+rm -f ~/.cache/com.pot-app.desktop/pot_screenshot_cut.png && flameshot gui -s -p ~/.cache/com.pot-app.desktop/pot_screenshot_cut.png && curl "127.0.0.1:60828/ocr_translate?screenshot=false"
+```
+
+리눅스 KDE에서 Spectacle을 활용한 스크린샷 번역:
+
+```bash
+spectacle -r -b -n -e -o ~/.cache/com.pot-app.desktop/pot_screenshot_cut.png && curl "127.0.0.1:60828/ocr_translate?screenshot=false"
 ```
 
 ## Existing Usages (Quick selection translation)
